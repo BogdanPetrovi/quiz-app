@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react"
-import api from "../api/api"
+import api from "../services/api/api"
 import './dataSubmission.css'
 
 //Made a page to ease data submission to database. Simple UI, not for production
