@@ -6,7 +6,9 @@ import './dataSubmission.css'
 export default function dataSubmission() {
   const [question, setQuestion] = useState('')
   const [id, setId] = useState('')
+  //correctAnswer state is for input value
   const [correctAnswer, setCorrectAnswer] = useState('')
+  //correctAnswers state is for capturing correct answers, if there is multiple
   const [correctAnswers, setCorrectAnswers] = useState<string[]>([])
   const [options, setOptions] = useState<string[]>(Array(8).fill(''))
 
@@ -20,6 +22,7 @@ export default function dataSubmission() {
 
   const handleCorrectAnswer = (event: ChangeEvent<HTMLInputElement>) => {
     setCorrectAnswer(event.target.value)
+    //if you put | in input, you can make multiple right answers
     if(event.target.value.includes('|')){
       const result = event.target.value.split("|")
       setCorrectAnswers(result)

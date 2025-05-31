@@ -1,10 +1,8 @@
-import { useTranslation } from "react-i18next"
+import { RouterProvider } from "react-router-dom"
+import { router } from './router'
 
 export default function App() {
-  const { t } = useTranslation('common')
   return(
-    <div>
-      <h1>{t('test')}</h1>
-    </div>
+    <RouterProvider router={router} />
   )
 }
