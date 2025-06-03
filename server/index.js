@@ -14,7 +14,18 @@ app.use(cors({
 }))
 const port = process.env.PORT
 
-
+app.get('/question/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query(
+      'SELECT * FROM questions JOIN options ON options.id = questions.id JOIN answers ON answers.id = questions.id WHERE questions.id = $1;', 
+    [id])
+    res.status(200).json(result.rows)
+  } catch (err) {
+    console.log(err)
+    res.status(500);
+  }
+})
 
 // Route for database import
 // app.post('/add', async (req, res) => {

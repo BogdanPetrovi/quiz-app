@@ -1,0 +1,9 @@
+{
+  "inputText": "Enter question id",
+  "submit": "Submit",
+  "pointsEarnedMessage": "You have earned {{number}}",
+  "point": "point",
+  "points": "points",
+  "new": "Find another question",
+  "404": "Question doesn't exist!"
+}

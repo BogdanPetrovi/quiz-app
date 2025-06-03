@@ -1,22 +1,28 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 
-import enCommon from './en/common.json'
-import srCommon from './sr/common.json'
+import enHome from './en/home.json'
+import srHome from './sr/home.json'
+import enQuestion from './en/question.json'
+import srQuestion from './sr/question.json'
 
-i18next.use(initReactI18next).init({
+
+i18next.use(initReactI18next).use(LanguageDetector).init({
   resources: {
     en: {
-      common: enCommon
+      home: enHome,
+      question: enQuestion
     },
     sr: {
-      common: srCommon
+      home: srHome,
+      question: srQuestion
     }
   },
   lng: 'sr',
   fallbackLng: 'en',
-  ns: ['common'],
-  defaultNS: 'common',
+  ns: ['home', 'question'],
+  defaultNS: 'question',
   interpolation: {
     escapeValue: false
   }
