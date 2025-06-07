@@ -18,7 +18,7 @@ export default function Form() {
   }
 
   return (
-    <div className='bg-purple-300 rounded-3xl w-11/12 lg:w-1/3 h-72 lg:h-1/4 flex flex-col justify-evenly items-center'>
+    <div className='bg-purple-300 rounded-3xl w-11/12 lg:w-1/4 h-72 lg:h-52 flex flex-col justify-evenly items-center'>
       <input className="text-3xl w-11/12 border-2 rounded-2xl p-3 border-purple-200 placeholder-zinc-500 focus:outline-0" type='number' placeholder={t('inputText')} onChange={handleChange} />
       <Submit text={t('submit')} handleClick={handleClick}  />
     </div>

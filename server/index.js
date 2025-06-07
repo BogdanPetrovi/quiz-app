@@ -10,7 +10,7 @@ app.use(helmet())
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors({
-  origin:'http://localhost:5173',
+  origin: "*",
 }))
 const port = process.env.PORT
 
@@ -24,6 +24,17 @@ app.get('/question/:id', async (req, res) => {
   } catch (err) {
     console.log(err)
     res.status(500);
+  }
+})
+
+app.get('/picture/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query('SELECT * FROM pictures WHERE id = $1;', [id])
+    res.status(200).json(result.rows)
+  } catch (err) {
+    console.log(err)
+    res.status(500)
   }
 })
 

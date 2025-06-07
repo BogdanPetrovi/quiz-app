@@ -7,7 +7,9 @@ interface Question {
   questionText: string,
   options: string[],
   answer: string[],
-  points: number
+  points: number,
+  hasPicture: boolean,
+  picture?: string
 }
 
 
@@ -17,7 +19,8 @@ const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
     questionText: '',
     options: [''],
     answer: [''],
-    points: 0
+    points: 0,
+    hasPicture: false
   });
   const [selected, setSelected] = useState<string[]>([])
   const [haveGuessed, setHaveGuessed] = useState(false)
@@ -28,18 +31,29 @@ const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await api.get(`/question/${id}`)
+      if(result.data[0]){
+        const questionData = result.data[0];
+        let pictureURL = null;
+
+        if(questionData.hasPicture){
+          const result = await api.get(`/picture/${id}`)
+          pictureURL = result.data[0].url
+        }
+        
+        setQuestion({
+          id: questionData.id,
+          questionText: questionData.text,
+          options: questionData.options,
+          answer: questionData.answer,
+          points: questionData.points,
+          hasPicture: questionData.hasPicture,
+          ...(pictureURL && { picture: pictureURL })
+        }
+        )
+      }
+      
       setLoading(false)
-
-      setQuestion({
-        id: result.data[0].id,
-        questionText: result.data[0].text,
-        options: result.data[0].options,
-        answer: result.data[0].answer,
-        points: result.data[0].points
-      })
-
     }
-    
 
     fetchData();
   }, [])
@@ -79,18 +93,22 @@ const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
   }
 
   return (
-    <div className='w-11/12 xl:w-2/4 h-5/6 flex flex-col justify-center items-start text-2xl select-none'>
+    <div className='w-11/12 lg:my-5 xl:w-2/4 h-5/6 flex flex-col justify-center items-start text-2xl select-none'>
       <h2 className='text-2xl self-end'>{question.points} {question.points === 1 ? t('point') : t('points')}</h2>
       <h2 className='text-3xl mb-3 -mt-1'>{question.id}. {question.questionText}</h2>
+      {
+        question.picture &&
+        <img src={question.picture} crossOrigin='anonymous' className='self-center mb-4' />
+      }
       {  
         !haveGuessed ?
         <>
           { 
             question.options.map((optionText, index) => (
               !selected.includes(optionText) ? 
-              <button key={index} className='bg-purple-400 w-full rounded-3xl text-start p-3 mb-3' onClick={() => handleSelect(optionText)}>{optionText}</button>
+              <button key={index} className='bg-purple-400 w-full rounded-3xl text-start p-3 mb-3 duration-200' onClick={() => handleSelect(optionText)}>{optionText}</button>
               :
-              <button key={index} className='bg-purple-300 w-full rounded-3xl text-start p-3 mb-3' onClick={() => handleUnSelect(optionText)}>{optionText}</button>
+              <button key={index} className='bg-purple-300 w-full rounded-3xl text-start p-3 mb-3 duration-200' onClick={() => handleUnSelect(optionText)}>{optionText}</button>
             ))
           }
           <button className='w-fit self-center p-5 bg-purple-200 rounded-3xl cursor-pointer hover:bg-purple-300 duration-500' onClick={handleSubmit}>{ t('submit') }</button>

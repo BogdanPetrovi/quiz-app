@@ -11,7 +11,7 @@ export default function SingleQuesiton() {
   return (
     <>
       <Background>
-        <div className='my-22 xl:my-0 gap-5 lg:gap-0 w-full h-full flex flex-col justify-center items-center'>
+        <div className='my-22 xl:my-0 gap-5 lg:gap-0 w-full h-full flex flex-col justify-around items-center'>
           <Question id={id} />
           <Button text={t('new')} route='/question' />
         </div>
