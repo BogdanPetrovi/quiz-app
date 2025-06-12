@@ -5,5 +5,8 @@
   "point": "point",
   "points": "points",
   "new": "Find another question",
+  "next": "Next",
+  "end": "Go back",
+  "outOf": " out of ",
   "404": "Question doesn't exist!"
 }

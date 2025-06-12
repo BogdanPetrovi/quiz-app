@@ -1,9 +1,9 @@
 import { changeLanguage } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function ChangeLanguage() {
+export default function Header() {
   const [lang, setLang] = useState('SRB');
   const { t } = useTranslation('home')
   const navigate = useNavigate()

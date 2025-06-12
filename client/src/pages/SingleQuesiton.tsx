@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import Question from '../components/Question'
-import Button from '../components/ui/Button'
+import Button from '../components/ui/RedirectButton'
 import Background from '../components/ui/Background';
 
 export default function SingleQuesiton() {

@@ -38,6 +38,23 @@ app.get('/picture/:id', async (req, res) => {
   }
 })
 
+app.get('/simulation', async (req, res) => {
+  try {
+    const result = await db.query(`
+      ( SELECT id FROM questions WHERE points IN (1, 1.5) ORDER BY RANDOM() LIMIT 15 )
+      UNION ALL
+      ( SELECT id FROM questions WHERE points IN (2, 2.5) ORDER BY RANDOM() LIMIT 8 )
+      UNION ALL
+      ( SELECT id FROM questions WHERE points IN (3, 3.5, 4) ORDER BY RANDOM() LIMIT 7 )
+    `);
+    const allQuestions = result.rows.map(item => item.id);
+    res.status(200).json(allQuestions)
+  } catch (err) {
+    console.log(err)
+    res.status(500)
+  }
+})
+
 // Route for database import
 // app.post('/add', async (req, res) => {
 //   const { question, id, answer, options } = req.body

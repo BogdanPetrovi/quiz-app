@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import Button from "../components/ui/Button";
+import Button from "../components/ui/RedirectButton";
 import Background from "../components/ui/Background";
 
 export default function Home() {

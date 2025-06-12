@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../services/api/api'
 import { useTranslation } from 'react-i18next'
+import Loading from './ui/Loading'
 
 interface Question {
   id: string,
@@ -13,7 +14,7 @@ interface Question {
 }
 
 
-const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
+const Question: React.FC<{ id: string | undefined, onSubmit?: (points: number, maxPoints: number) => void }> = ({ id, onSubmit }) => {
   const [question, setQuestion] = useState<Question>({
     id: '',
     questionText: '',
@@ -30,6 +31,9 @@ const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
+      setHaveGuessed(false)
+      setSelected([])
       const result = await api.get(`/question/${id}`)
       if(result.data[0]){
         const questionData = result.data[0];
@@ -56,7 +60,7 @@ const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
     }
 
     fetchData();
-  }, [])
+  }, [id])
 
   const handleSelect = (optionText: string) => {
     setSelected([...selected, optionText])
@@ -68,23 +72,31 @@ const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
   }
 
   const handleSubmit = () => {
-    setHaveGuessed(true)
     const correctAnswers = selected.filter(val => question.answer.includes(val))
     //Checks if there is same amount of selected and selected correct answers and if not its 0 points
     if(correctAnswers.length === selected.length){
       //Check if there is same amount of selected and answers if there is thats all points, if not it gets splited
       if(selected.length === question.answer.length){
         setPoints(question.points)
+        if(onSubmit)
+          onSubmit(question.points, question.points)
       } else {
         const numberOfPoints = ((question.points / question.answer.length) * selected.length).toFixed(2)
         setPoints(Number(numberOfPoints))
+        if(onSubmit)
+          onSubmit(Number(numberOfPoints), question.points)
       }
+    } else {
+      setPoints(0)
+      if(onSubmit)
+        onSubmit(0, question.points)
     }
+    setHaveGuessed(true)
   }
 
   if(loading){
     return (
-      <div className='mb-10 size-44 animate-spin bg-purple-400 rounded-2xl'></div>
+      <Loading />
     )
   }
 
@@ -108,7 +120,7 @@ const Question: React.FC<{ id: string | undefined }> = ({ id }) => {
               !selected.includes(optionText) ? 
               <button key={index} className='bg-purple-400 w-full rounded-3xl text-start p-3 mb-3 duration-200' onClick={() => handleSelect(optionText)}>{optionText}</button>
               :
-              <button key={index} className='bg-purple-300 w-full rounded-3xl text-start p-3 mb-3 duration-200' onClick={() => handleUnSelect(optionText)}>{optionText}</button>
+              <button key={index} className='bg-purple-300 drop-shadow-xl w-full rounded-3xl text-start p-3 mb-3 duration-200' onClick={() => handleUnSelect(optionText)}>{optionText}</button>
             ))
           }
           <button className='w-fit self-center p-5 bg-purple-200 rounded-3xl cursor-pointer hover:bg-purple-300 duration-500' onClick={handleSubmit}>{ t('submit') }</button>
